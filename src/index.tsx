@@ -10,7 +10,7 @@ import theme from "./app/MaterialTheme";
 import "./css/index.css";
 import { BrowserRouter as Router } from "react-router-dom";
 
-const container = document.getElementById("root")!;
+const container = document.getElementById("root")!; //main APP
 const root = createRoot(container);
 
 root.render(
