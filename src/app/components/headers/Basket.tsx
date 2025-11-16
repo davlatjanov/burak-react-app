@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Button, Stack } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
@@ -11,7 +11,7 @@ export default function Basket() {
   const authMember = null;
   const history = useHistory();
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   /** HANDLERS **/
@@ -25,15 +25,14 @@ export default function Basket() {
   return (
     <Box className={"hover-line"}>
       <IconButton
-        aria-label="cart" /*This is for accessibility  It tells screen readers:
-        “This button is for the cart.”*/
+        aria-label="cart"
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
       >
-        <Badge badgeContent={0} color="secondary">
+        <Badge badgeContent={3} color="secondary">
           <img src={"/icons/shopping-cart.svg"} />
         </Badge>
       </IconButton>

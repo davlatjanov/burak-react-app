@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
 
 export default function HomeNavbar() {
-  const authMember = false;
+  const authMember = true;
   return (
     <div className="home-navbar">
       <Container className="navbar-container">
@@ -43,8 +43,8 @@ export default function HomeNavbar() {
                 Help
               </NavLink>
             </Box>
-            {/* BASKET */}
             <Basket />
+
             {!authMember ? (
               <Box>
                 <Button variant="contained" className="login-button">
