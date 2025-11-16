@@ -3,6 +3,7 @@ import { Container } from "@mui/material";
 import path from "path";
 import ChosenProduct from "./ChosenProduct";
 import Products from "./Products";
+import "../../../css/products.css";
 
 export default function ProductsPage() {
   const products = useRouteMatch();
