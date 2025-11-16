@@ -161,6 +161,7 @@ export default function Products() {
               )}
             </Stack>
           </Stack>
+
           <Stack className={"pagination-section"}>
             <Pagination
               count={3}

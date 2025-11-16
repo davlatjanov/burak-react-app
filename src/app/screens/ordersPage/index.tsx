@@ -70,7 +70,6 @@ export default function OrdersPage() {
             <Divider height="4" width="60" bg="#9b9797ff" />
             <Box className="member-location">
               <div className="member-location-info">
-                {" "}
                 <LocationOnIcon /> Do not exist
               </div>
             </Box>
