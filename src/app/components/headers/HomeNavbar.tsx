@@ -1,9 +1,26 @@
 import { Box, Button, Container, Stack } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import Basket from "./Basket";
+import { useEffect, useState } from "react";
 
 export default function HomeNavbar() {
-  const authMember = true;
+  const authMember = null;
+
+  const [state, setState] = useState<number>(0);
+  const [value, setValue] = useState<boolean>(true);
+
+  useEffect(() => {
+    console.log("componentDidMount");
+    setState(state + 1);
+
+    return () => {
+      console.log("componentWillUnmount");
+    };
+  }, [value]);
+
+  const butHan = () => {
+    setValue(!value);
+  };
 
   return (
     <div className="home-navbar">
@@ -65,10 +82,14 @@ export default function HomeNavbar() {
           <Stack className="detail">
             <Box className="head-main-text">World's Most Delicious Cousine</Box>
             <Box className="wel-text">The Choise, not just a choise</Box>
-            <Box className="service-text">24 hours service</Box>
+            <Box className="service-text">{state} hours service</Box>
             <Box className="signup">
               {!authMember ? (
-                <Button variant="contained" className="signup-button">
+                <Button
+                  variant="contained"
+                  className="signup-button"
+                  onClick={butHan}
+                >
                   Sing Up
                 </Button>
               ) : null}
