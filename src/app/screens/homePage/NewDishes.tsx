@@ -9,15 +9,13 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import Divider from "../../components/divider";
-
-const newDishes = [
-  { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-];
+import { useSelector } from "react-redux";
+import { retrieveHomePage } from "./selector";
+import { serverAPI } from "../../../lib/config";
+import { Product } from "../../../lib/types/product";
 
 export default function NewDishes() {
+  const { newDishes } = useSelector(retrieveHomePage);
   return (
     <div className="new-products-frame">
       <Container>
@@ -26,13 +24,14 @@ export default function NewDishes() {
           <Stack className="cards-frame">
             <CssVarsProvider>
               {newDishes.length !== 0 ? (
-                newDishes.map((ele, index) => {
+                newDishes.map((ele: Product) => {
+                  const imagePath = `${serverAPI}/${ele.productImages[0]}`;
                   return (
-                    <Card key={index} variant="outlined" className="card">
+                    <Card key={ele._id} variant="outlined" className="card">
                       <CardOverflow>
                         <div className="product-sale">Normal Size</div>
                         <AspectRatio ratio={"1"}>
-                          <img src={ele.imagePath} alt="" />
+                          <img src={imagePath} alt="" />
                         </AspectRatio>
                       </CardOverflow>
 
@@ -47,7 +46,7 @@ export default function NewDishes() {
                           </Stack>
                           <Stack>
                             <Typography className="views">
-                              20
+                              {ele.productViews}
                               <VisibilityIcon
                                 sx={{ fontSize: 20, marginLeft: "5px" }}
                               />

@@ -11,7 +11,7 @@ import "../../../css/home.css";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
-import { setPopularDishes } from "./slice";
+import { setNewDishes, setPopularDishes } from "./slice";
 import { retrieveHomePage } from "./selector";
 import { Product } from "../../../lib/types/product";
 import ProductService from "../../services/ProductService";
@@ -20,12 +20,12 @@ import { serverAPI } from "../../../lib/config";
 
 const actionDispatch = (dispatch: Dispatch) => ({
   setPopularDishes: (data: Product[]) => dispatch(setPopularDishes(data)),
+  setNewDishes: (data: Product[]) => dispatch(setNewDishes(data)),
 });
 
 export default function HomePage() {
-  const { setPopularDishes } = actionDispatch(useDispatch());
+  const { setPopularDishes, setNewDishes } = actionDispatch(useDispatch());
   useEffect(() => {
-    // Backend server data request => DATA
     const product = new ProductService();
     product
       .getProducts({
@@ -38,8 +38,18 @@ export default function HomePage() {
         setPopularDishes(data);
       })
       .catch((err) => console.log("ERROR", err));
-    // slice: Data => Redux Store
-    // @ts-ignore
+
+    product
+      .getProducts({
+        page: 1,
+        limit: 4,
+        order: "createdAt",
+        productCollection: ProductCollection.DISH,
+      })
+      .then((data) => {
+        setNewDishes(data);
+      })
+      .catch((err) => console.log("ERROR", err));
   }, []);
   return (
     <div className="homepage">
