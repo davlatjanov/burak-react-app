@@ -8,7 +8,13 @@ export const retrieveHomePage = createSelector(
    If homePage is the same as last time,
    don't calculate again, just return the saved homepage.
 */
-  (homePage) => homePage
+  (homePage) => {
+    return {
+      popularDishes: homePage.popularDishes,
+      newDishes: homePage.newDishes,
+      topUsers: homePage.topUsers,
+    };
+  }
 );
 // export const retrieveNewDishes = createSelector(
 //   selectHomePage,
