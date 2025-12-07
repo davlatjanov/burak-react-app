@@ -29,7 +29,7 @@ export default function NewDishes() {
                   return (
                     <Card key={ele._id} variant="outlined" className="card">
                       <CardOverflow>
-                        <div className="product-sale">Normal Size</div>
+                        <div className="product-sale">{ele.productSize}</div>
                         <AspectRatio ratio={"1"}>
                           <img src={imagePath} alt="" />
                         </AspectRatio>
@@ -42,7 +42,9 @@ export default function NewDishes() {
                               {ele.productName}
                             </Typography>
                             <Divider width="2" height="16" bg="#d9d9d9" />
-                            <Typography className="price">$12</Typography>
+                            <Typography className="price">
+                              $ {ele.productPrice}
+                            </Typography>
                           </Stack>
                           <Stack>
                             <Typography className="views">
