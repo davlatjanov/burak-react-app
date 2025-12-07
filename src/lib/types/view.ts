@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import { ViewGroup } from "../enums/view.enum";
 
 export interface View {

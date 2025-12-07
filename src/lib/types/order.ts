@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import { OrderStatus } from "../enums/order.enum";
 import { Product } from "./product";
 
@@ -6,8 +5,8 @@ export interface OrderItem {
   _id: string;
   itemQuantity: number;
   itemPrice: number;
-  orderId: ObjectId;
-  productId: ObjectId;
+  orderId: string;
+  productId: string;
   createdAt: Date;
   updatedAt: Date;
 }
