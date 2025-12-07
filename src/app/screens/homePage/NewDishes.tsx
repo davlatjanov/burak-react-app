@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { retrieveHomePage } from "./selector";
 import { serverAPI } from "../../../lib/config";
 import { Product } from "../../../lib/types/product";
+import { ProductCollection } from "../../../lib/enums/product.enum";
 
 export default function NewDishes() {
   const { newDishes } = useSelector(retrieveHomePage);
@@ -24,12 +25,16 @@ export default function NewDishes() {
           <Stack className="cards-frame">
             <CssVarsProvider>
               {newDishes.length !== 0 ? (
-                newDishes.map((ele: Product) => {
-                  const imagePath = `${serverAPI}/${ele.productImages[0]}`;
+                newDishes.map((product: Product) => {
+                  const imagePath = `${serverAPI}/${product.productImages[0]}`;
+                  const sizeVolume =
+                    product.productCollection === ProductCollection.DRINK
+                      ? product.productVolume + "l"
+                      : product.productSize + " size";
                   return (
-                    <Card key={ele._id} variant="outlined" className="card">
+                    <Card key={product._id} variant="outlined" className="card">
                       <CardOverflow>
-                        <div className="product-sale">{ele.productSize}</div>
+                        <div className="product-sale">{sizeVolume}</div>
                         <AspectRatio ratio={"1"}>
                           <img src={imagePath} alt="" />
                         </AspectRatio>
@@ -39,16 +44,16 @@ export default function NewDishes() {
                         <Stack className="info">
                           <Stack flexDirection={"row"}>
                             <Typography className="title">
-                              {ele.productName}
+                              {product.productName}
                             </Typography>
                             <Divider width="2" height="16" bg="#d9d9d9" />
                             <Typography className="price">
-                              $ {ele.productPrice}
+                              $ {product.productPrice}
                             </Typography>
                           </Stack>
                           <Stack>
                             <Typography className="views">
-                              {ele.productViews}
+                              {product.productViews}
                               <VisibilityIcon
                                 sx={{ fontSize: 20, marginLeft: "5px" }}
                               />
