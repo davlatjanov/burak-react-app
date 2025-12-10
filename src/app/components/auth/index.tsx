@@ -7,7 +7,7 @@ import { Fab, Stack, TextField } from "@mui/material";
 import styled from "styled-components";
 import LoginIcon from "@mui/icons-material/Login";
 import { Messages } from "../../../lib/config";
-import { MemberInput } from "../../../lib/types/member";
+import { LoginInput, MemberInput } from "../../../lib/types/member";
 import MemberService from "../../services/MemberService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 
@@ -53,6 +53,8 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
   const passwordKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && signupOpen) {
       handleSignupRequest().then();
+    } else if (e.key === "Enter" && loginOpen) {
+      handleLoginRequest().then();
     }
   };
 
@@ -76,6 +78,26 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
     } catch (error) {
       console.log("Error during signup request:", error);
       handleSignupClose();
+      sweetErrorHandling(error).then();
+    }
+  };
+
+  const handleLoginRequest = async () => {
+    try {
+      const isFulfill = memberNick !== "" && memberPassword !== "";
+
+      if (!isFulfill) {
+        throw new Error(Messages.error3);
+      }
+      const loginInput: LoginInput = {
+        memberNick: memberNick,
+        memberPassword: memberPassword,
+      };
+      const member = new MemberService();
+      const result = await member.login(loginInput);
+      handleLoginClose();
+    } catch (error) {
+      handleLoginClose();
       sweetErrorHandling(error).then();
     }
   };
@@ -178,11 +200,13 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
                 variant={"outlined"}
                 type={"password"}
                 onChange={(e) => setMemberPassword(e.target.value)}
+                onKeyDown={passwordKeyDown}
               />
               <Fab
                 sx={{ marginTop: "27px", width: "120px" }}
                 variant={"extended"}
                 color={"primary"}
+                onClick={handleLoginRequest}
               >
                 <LoginIcon sx={{ mr: 1 }} />
                 Login
