@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Badge,
   Box,
@@ -13,21 +13,16 @@ import SearchIcon from "@mui/icons-material/Search";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { retrieveProductsPage } from "./selector";
 import { serverAPI } from "../../../lib/config";
 import { ProductCollection } from "../../../lib/enums/product.enum";
-
-const products = [
-  { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-  { productName: "Lavash", imagePath: "/img/lavash.webp" },
-  { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab-fresh.webp" },
-  { productName: "Kebab", imagePath: "/img/kebab.webp" },
-];
+import { Dispatch } from "@reduxjs/toolkit";
+import { Member } from "../../../lib/types/member";
+import { setChosenProduct, setProducts, setRestaurant } from "./slice";
+import { Product } from "../../../lib/types/product";
+import ProductService from "../../services/ProductService";
+import MemberService from "../../services/MemberService";
 
 const familyBrands = [
   { brandName: "Gurme", imagePath: "/img/gurme.webp" },
@@ -36,8 +31,34 @@ const familyBrands = [
   { brandName: "Doner", imagePath: "/img/doner.webp" },
 ];
 
+const actionDispatch = (dispatch: Dispatch) => ({
+  setRestaurant: (data: Member | null) => dispatch(setRestaurant(data)),
+  setChosenProduct: (data: Product | null) => dispatch(setChosenProduct(data)),
+  setProducts: (data: Product[]) => dispatch(setProducts(data)),
+});
+
 export default function Products() {
   const { products } = useSelector(retrieveProductsPage);
+
+  const { setChosenProduct, setProducts, setRestaurant } = actionDispatch(
+    useDispatch()
+  );
+  useEffect(() => {
+    const product = new ProductService();
+    const member = new MemberService();
+
+    product
+      .getProducts({
+        page: 1,
+        limit: 8,
+        order: "createdAt",
+        productCollection: ProductCollection.DISH,
+        search: "",
+      })
+      .then((data) => setProducts(data))
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div className="products">
       <Container>
@@ -122,14 +143,14 @@ export default function Products() {
                   const imagePath = `${serverAPI}/${product.productImages[0]}`;
                   const sizeVolume =
                     product.productCollection === ProductCollection.DRINK
-                      ? product.productVolume + "l"
+                      ? product.productVolume + "litre"
                       : product.productSize + " size";
                   return (
                     <Stack key={product._id} className={"product-card"}>
                       <Stack
                         className={"product-img"}
                         sx={{
-                          backgroundImage: `url(${product.productImages[0]})`,
+                          backgroundImage: `url(${imagePath})`,
                         }}
                       >
                         <div className={"product-sale"}>{sizeVolume}</div>
@@ -145,9 +166,15 @@ export default function Products() {
                           className={"view-btn product-actions"}
                           sx={{ right: "36px" }}
                         >
-                          <Badge badgeContent={20} color={"secondary"}>
+                          <Badge
+                            badgeContent={product.productViews}
+                            color={"secondary"}
+                          >
                             <RemoveRedEyeIcon
-                              sx={{ color: false ? "gray" : "white" }}
+                              sx={{
+                                color:
+                                  product.productViews === 0 ? "gray" : "white",
+                              }}
                             ></RemoveRedEyeIcon>
                           </Badge>
                         </Button>
@@ -162,7 +189,7 @@ export default function Products() {
                           style={{ color: "#FF9200" }}
                         >
                           <MonetizationOnIcon />
-                          {12}
+                          {product.productPrice}
                         </div>
                       </Box>
                     </Stack>

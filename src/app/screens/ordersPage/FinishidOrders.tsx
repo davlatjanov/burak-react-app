@@ -49,7 +49,7 @@ export default function FinishedOrders() {
           );
         })}
 
-        {false && (
+        {true && (
           <Box display={"flex"} flexDirection={"row"} justifyContent={"center"}>
             <img
               src={"/icons/noimage-list.svg"}

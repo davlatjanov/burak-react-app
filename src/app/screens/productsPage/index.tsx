@@ -13,23 +13,10 @@ import { Product } from "../../../lib/types/product";
 import { useEffect } from "react";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
-
-const actionDispatch = (dispatch: Dispatch) => ({
-  setRestaurant: (data: Member | null) => dispatch(setRestaurant(data)),
-  setChosenProduct: (data: Product | null) => dispatch(setChosenProduct(data)),
-  setProducts: (data: Member | null) => dispatch(setProducts(data)),
-});
+import { ProductCollection } from "../../../lib/enums/product.enum";
 
 export default function ProductsPage() {
   const products = useRouteMatch();
-  const { setChosenProduct, setProducts, setRestaurant } = actionDispatch(
-    useDispatch()
-  );
-  useEffect(() => {
-    const product = new ProductService();
-    const member = new MemberService();
-  }, []);
-
   return (
     <div className="products-page">
       <Switch>
