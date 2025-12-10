@@ -20,13 +20,19 @@ import { useParams } from "react-router-dom";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
 import { serverAPI } from "../../../lib/config";
+import { CartItem } from "../../../lib/types/search";
 
 const actionDispatch = (dispatch: Dispatch) => ({
   setRestaurant: (data: Member | null) => dispatch(setRestaurant(data)),
   setChosenProduct: (data: Product | null) => dispatch(setChosenProduct(data)),
 });
 
-export default function ChosenProduct() {
+interface ChosenProductProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function ChosenProduct(props: ChosenProductProps) {
+  const { onAdd } = props;
   const { chosenProduct, restaurant } = useSelector(retrieveProductsPage);
   const { setChosenProduct, setRestaurant } = actionDispatch(useDispatch());
 
@@ -58,14 +64,16 @@ export default function ChosenProduct() {
             modules={[FreeMode, Navigation, Thumbs]}
             className="swiper-area"
           >
-            {chosenProduct?.productImages.map((ele: string, index: number) => {
-              const imagePath = `${serverAPI}/${ele}`;
-              return (
-                <SwiperSlide key={index}>
-                  <img className="slider-image" src={imagePath} />
-                </SwiperSlide>
-              );
-            })}
+            {chosenProduct?.productImages.map(
+              (chosenProduct: string, index: number) => {
+                const imagePath = `${serverAPI}/${chosenProduct}`;
+                return (
+                  <SwiperSlide key={index}>
+                    <img className="slider-image" src={imagePath} />
+                  </SwiperSlide>
+                );
+              }
+            )}
           </Swiper>
         </Stack>
         <Stack className={"chosen-product-info"}>

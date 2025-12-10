@@ -24,6 +24,7 @@ import { Product, ProductInquiry } from "../../../lib/types/product";
 import ProductService from "../../services/ProductService";
 import MemberService from "../../services/MemberService";
 import { useHistory } from "react-router-dom";
+import { CartItem } from "../../../lib/types/search";
 
 const familyBrands = [
   { brandName: "Gurme", imagePath: "/img/gurme.webp" },
@@ -38,7 +39,11 @@ const actionDispatch = (dispatch: Dispatch) => ({
   setProducts: (data: Product[]) => dispatch(setProducts(data)),
 });
 
-export default function Products() {
+interface ProductProps {
+  onAdd: (item: CartItem) => void;
+}
+export default function Products(props: ProductProps) {
+  const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(retrieveProductsPage);
 
@@ -270,6 +275,16 @@ export default function Products() {
                             src={"/icons/shopping-cart.svg"}
                             alt=""
                             style={{ display: "flex" }}
+                            onClick={(e) => {
+                              onAdd({
+                                _id: product._id,
+                                name: product.productName,
+                                quantity: 1,
+                                price: product.productPrice,
+                                image: product.productImages[0],
+                              });
+                              e.stopPropagation();
+                            }}
                           />
                         </Button>
 
