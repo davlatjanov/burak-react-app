@@ -13,6 +13,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { retrieveProductsPage } from "./selector";
+import { serverAPI } from "../../../lib/config";
+import { ProductCollection } from "../../../lib/enums/product.enum";
 
 const products = [
   { productName: "Cutlet", imagePath: "/img/cutlet.webp" },
@@ -33,6 +37,7 @@ const familyBrands = [
 ];
 
 export default function Products() {
+  const { products } = useSelector(retrieveProductsPage);
   return (
     <div className="products">
       <Container>
@@ -113,14 +118,21 @@ export default function Products() {
 
             <Stack className={"product-wrapper"}>
               {products.length !== 0 ? (
-                products.map((product, index) => {
+                products.map((product) => {
+                  const imagePath = `${serverAPI}/${product.productImages[0]}`;
+                  const sizeVolume =
+                    product.productCollection === ProductCollection.DRINK
+                      ? product.productVolume + "l"
+                      : product.productSize + " size";
                   return (
-                    <Stack key={index} className={"product-card"}>
+                    <Stack key={product._id} className={"product-card"}>
                       <Stack
                         className={"product-img"}
-                        sx={{ backgroundImage: `url(${product.imagePath})` }}
+                        sx={{
+                          backgroundImage: `url(${product.productImages[0]})`,
+                        }}
                       >
-                        <div className={"product-sale"}>Normal Size</div>
+                        <div className={"product-sale"}>{sizeVolume}</div>
                         <Button className={"shop-btn product-actions"}>
                           <img
                             src={"/icons/shopping-cart.svg"}
@@ -211,18 +223,18 @@ export default function Products() {
       </div>
 
       <div className={"address"}>
-        <Container>
+        <Container sx={{ display: "flex", justifyContent: "center" }}>
           <Stack className={"address-area"}>
             <Box className={"title"}>Our Address</Box>
 
             <iframe
               title="Adress"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96344.69019996887!2d72.27194424083031!3d40.779084963529165!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38bcecc22df6d3a9%3A0xb3a2b23f51081724!2sStatue%20Of%20Z.M.%20Babur!5e0!3m2!1sen!2skr!4v1753951976534!5m2!1sen!2skr"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d24213.011466157295!2d72.2130488532159!3d40.660164424928745!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38bc8e79a0b91e83%3A0x90d7026e93dc4e23!2sUzAuto%20Motors!5e0!3m2!1sen!2skr!4v1754304334192!5m2!1sen!2skr"
               width="1320"
               height="500"
               style={{
                 marginTop: "60px",
-                border: 0,
+                border: "2px black solid",
               }}
               allowFullScreen
               loading="lazy"
