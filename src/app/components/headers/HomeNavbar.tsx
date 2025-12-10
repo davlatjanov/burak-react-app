@@ -10,14 +10,21 @@ interface HomeNavbarProps {
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
+  setSignupOpen: (isOpen: boolean) => void;
+  setLoginOpen: (isOpen: boolean) => void;
 }
 
 export default function HomeNavbar(props: HomeNavbarProps) {
-  const { cartItems, onAdd, onDelete, onDeleteAll, onRemove } = props;
-  const authMember = true;
-
-  const [count, setCount] = useState<number>(0);
-  const [value, setValue] = useState<boolean>(true);
+  const {
+    cartItems,
+    onAdd,
+    onDelete,
+    onDeleteAll,
+    onRemove,
+    setLoginOpen,
+    setSignupOpen,
+  } = props;
+  const authMember = false;
 
   /** HANDLERS **/
 
@@ -70,7 +77,11 @@ export default function HomeNavbar(props: HomeNavbarProps) {
 
             {!authMember ? (
               <Box>
-                <Button variant="contained" className="login-button">
+                <Button
+                  variant="contained"
+                  className="login-button"
+                  onClick={() => setLoginOpen(true)}
+                >
                   Login
                 </Button>
               </Box>
@@ -87,10 +98,14 @@ export default function HomeNavbar(props: HomeNavbarProps) {
           <Stack className="detail">
             <Box className="head-main-text">World's Most Delicious Cousine</Box>
             <Box className="wel-text">The Choise, not just a choise</Box>
-            <Box className="service-text">{count} hours service</Box>
+            <Box className="service-text">24 hours service</Box>
             <Box className="signup">
               {!authMember ? (
-                <Button variant="contained" className="signup-button">
+                <Button
+                  variant="contained"
+                  className="signup-button"
+                  onClick={() => setSignupOpen(true)}
+                >
                   Sing Up
                 </Button>
               ) : null}
