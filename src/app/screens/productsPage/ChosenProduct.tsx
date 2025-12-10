@@ -51,7 +51,7 @@ export default function ChosenProduct(props: ChosenProductProps) {
       .then((data) => setRestaurant(data))
       .catch((err) => console.log("ERROR", err));
   }, []);
-
+  if (!chosenProduct) return null;
   return (
     <div className={"chosen-product"}>
       <Box className={"title"}>Product Detail</Box>
@@ -64,45 +64,58 @@ export default function ChosenProduct(props: ChosenProductProps) {
             modules={[FreeMode, Navigation, Thumbs]}
             className="swiper-area"
           >
-            {chosenProduct?.productImages.map(
-              (chosenProduct: string, index: number) => {
-                const imagePath = `${serverAPI}/${chosenProduct}`;
-                return (
-                  <SwiperSlide key={index}>
-                    <img className="slider-image" src={imagePath} />
-                  </SwiperSlide>
-                );
-              }
-            )}
+            {chosenProduct?.productImages.map((ele: string, index: number) => {
+              const imagePath = `${serverAPI}/${ele}`;
+              return (
+                <SwiperSlide key={index}>
+                  <img className="slider-image" src={imagePath} />
+                </SwiperSlide>
+              );
+            })}
           </Swiper>
         </Stack>
         <Stack className={"chosen-product-info"}>
           <Box className={"info-box"}>
             <strong className={"product-name"}>
-              {chosenProduct?.productName}
+              {chosenProduct.productName}
             </strong>
             <span className={"resto-name"}>{restaurant?.memberNick}</span>
+            <span className={"resto-name"}>{restaurant?.memberPhone}</span>
             <Box className={"rating-box"}>
               <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
               <div className={"evaluation-box"}>
                 <div className={"product-view"}>
                   <RemoveRedEyeIcon sx={{ mr: "10px" }} />
-                  <span>{chosenProduct?.productViews}</span>
+                  <span>{chosenProduct.productViews}</span>
                 </div>
               </div>
             </Box>
             <p className={"product-desc"}>
               {chosenProduct?.productDesc
-                ? chosenProduct?.productDesc
+                ? chosenProduct.productDesc
                 : "NO DESCRIPTION"}
             </p>
             <Divider height="1" width="100%" bg="#000000" />
             <div className={"product-price"}>
               <span>Price:</span>
-              <span>${chosenProduct?.productPrice}</span>
+              <span>{chosenProduct.productPrice}</span>
             </div>
             <div className={"button-box"}>
-              <Button variant="contained">Add To Basket</Button>
+              <Button
+                variant="contained"
+                onClick={(e) => {
+                  onAdd({
+                    _id: chosenProduct._id,
+                    name: chosenProduct.productName,
+                    quantity: 1,
+                    price: chosenProduct.productPrice,
+                    image: chosenProduct.productImages[0],
+                  });
+                  e.stopPropagation();
+                }}
+              >
+                Add To Basket
+              </Button>
             </div>
           </Box>
         </Stack>

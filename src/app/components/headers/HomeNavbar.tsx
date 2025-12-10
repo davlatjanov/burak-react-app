@@ -6,28 +6,20 @@ import { CartItem } from "../../../lib/types/search";
 
 interface HomeNavbarProps {
   cartItems: CartItem[];
+  onAdd: (item: CartItem) => void;
+  onRemove: (item: CartItem) => void;
+  onDelete: (item: CartItem) => void;
+  onDeleteAll: () => void;
 }
 
 export default function HomeNavbar(props: HomeNavbarProps) {
-  const { cartItems } = props;
+  const { cartItems, onAdd, onDelete, onDeleteAll, onRemove } = props;
   const authMember = true;
 
   const [count, setCount] = useState<number>(0);
   const [value, setValue] = useState<boolean>(true);
 
-  useEffect(() => {
-    console.log("componentDidMount");
-    setCount(count + 1);
-
-    return () => {
-      console.log("componentWillMount");
-    };
-  }, [value]);
-
   /** HANDLERS **/
-  const buttonHandler = () => {
-    setValue(!value);
-  };
 
   return (
     <div className="home-navbar">
@@ -68,7 +60,13 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                 Help
               </NavLink>
             </Box>
-            <Basket cartItems={cartItems} />
+            <Basket
+              cartItems={cartItems}
+              onAdd={onAdd}
+              onRemove={onRemove}
+              onDelete={onDelete}
+              onDeleteAll={onDeleteAll}
+            />
 
             {!authMember ? (
               <Box>
@@ -92,11 +90,7 @@ export default function HomeNavbar(props: HomeNavbarProps) {
             <Box className="service-text">{count} hours service</Box>
             <Box className="signup">
               {!authMember ? (
-                <Button
-                  variant="contained"
-                  className="signup-button"
-                  onClick={buttonHandler}
-                >
+                <Button variant="contained" className="signup-button">
                   Sing Up
                 </Button>
               ) : null}
