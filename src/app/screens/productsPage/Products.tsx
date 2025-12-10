@@ -39,9 +39,7 @@ const actionDispatch = (dispatch: Dispatch) => ({
 });
 
 export default function Products() {
-  const { setChosenProduct, setProducts, setRestaurant } = actionDispatch(
-    useDispatch()
-  );
+  const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(retrieveProductsPage);
 
   const [productSearch, setProductSearch] = useState<ProductInquiry>({
