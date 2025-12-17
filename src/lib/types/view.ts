@@ -1,7 +1,8 @@
+import { ObjectId } from "mongoose";
 import { ViewGroup } from "../enums/view.enum";
 
 export interface View {
-  _id: string;
+  _id: ObjectId;
   viewGroup: ViewGroup;
   memberId: string;
   viewRefId: string;
